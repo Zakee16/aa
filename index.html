@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zakee Ahamed – Online Marketer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:dark;
+  --bg:#060a18; --ink:#eaf6ff; --muted:#9fb4cc; --card:rgba(20,32,64,.55); --line:rgba(34,228,255,.25);
+  --cyan:#22e4ff; --violet:#8b5cff; --amber:#ffb347;
+  --head:"Space Grotesk","Trebuchet MS",sans-serif;
+  --body:"Instrument Sans","Segoe UI",Arial,sans-serif;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.65 var(--body);overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+
+/* tech background: gradient + moving grid floor + particle canvas */
+.bg{position:fixed;inset:0;z-index:-3;background:radial-gradient(ellipse at 75% 20%,#1b1458 0%,#0a1030 45%,#060a18 80%)}
+.floor{position:fixed;left:-50%;right:-50%;bottom:0;height:55vh;z-index:-2;overflow:hidden;perspective:380px;pointer-events:none;
+  -webkit-mask-image:linear-gradient(to top,#000 20%,transparent);mask-image:linear-gradient(to top,#000 20%,transparent)}
+.floor i{position:absolute;left:0;right:0;top:-60px;bottom:-60px;transform:rotateX(62deg);transform-origin:50% 100%;
+  background-image:linear-gradient(rgba(34,228,255,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,255,.35) 1px,transparent 1px);
+  background-size:60px 60px;animation:flow 3s linear infinite;will-change:transform}
+@keyframes flow{to{transform:rotateX(62deg) translateY(60px)}}
+#net{position:fixed;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none}
+.glow{position:fixed;left:0;top:0;width:360px;height:360px;margin:-180px 0 0 -180px;border-radius:50%;z-index:-1;pointer-events:none;
+  background:radial-gradient(circle,rgba(34,228,255,.16),transparent 65%);will-change:transform;opacity:0}
+.progress{position:fixed;top:0;left:0;height:3px;width:100%;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,var(--cyan),var(--violet));z-index:10}
+
+.wrap{max-width:64rem;margin:0 auto;padding:0 1.25rem}
+nav{display:flex;justify-content:space-between;gap:1rem;padding:1.25rem 0;font-weight:600}
+nav div{display:flex;gap:1.25rem;flex-wrap:wrap}
+nav a{text-decoration:none}
+nav a:hover{color:var(--cyan)}
+
+.hero{display:grid;gap:3rem;grid-template-columns:1.1fr .9fr;align-items:center;padding:2.5rem 0 4.5rem}
+h1{font:700 clamp(3rem,9vw,6rem)/.95 var(--head);letter-spacing:-.03em;margin:0 0 1rem;position:relative}
+h1 span{display:block;opacity:0;transform:translateY(40px);animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards}
+h1 span:nth-child(2){animation-delay:.18s;background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+@keyframes rise{to{opacity:1;transform:none}}
+h1:hover span:first-child{animation:glitch .4s steps(2) 1}
+@keyframes glitch{0%{transform:translate(0)}25%{transform:translate(-4px,2px);text-shadow:3px 0 var(--cyan),-3px 0 #ff3df2}50%{transform:translate(4px,-2px);text-shadow:-3px 0 var(--cyan),3px 0 #ff3df2}100%{transform:none}}
+.role{font:500 1.35rem/1.4 var(--head);color:var(--muted);margin:0 0 1.75rem;min-height:2.8em}
+.role b{color:var(--cyan);font-weight:700}
+.caret{display:inline-block;width:2px;height:1.1em;background:var(--cyan);margin-left:3px;vertical-align:-.15em;animation:bl 1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+.btn{display:inline-block;background:linear-gradient(90deg,var(--cyan),var(--violet));color:#04101f;padding:.85rem 1.5rem;border-radius:.4rem;font-weight:700;text-decoration:none;transition:transform .2s,box-shadow .2s;will-change:transform}
+.btn:hover{box-shadow:0 0 28px rgba(34,228,255,.55)}
+.btn.alt{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--cyan);margin-left:.5rem}
+
+/* photo with HUD */
+.photo{position:relative;justify-self:center;width:min(100%,22rem);perspective:900px}
+.orbit{position:absolute;left:50%;top:50%;width:120%;aspect-ratio:1;margin:0;transform:translate(-50%,-50%);border:1px dashed rgba(34,228,255,.45);border-radius:50%;animation:spin 24s linear infinite;pointer-events:none}
+.orbit.o2{width:145%;border-color:rgba(139,92,255,.4);animation-duration:38s;animation-direction:reverse}
+.orbit u{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan);top:-6px;left:50%}
+.o2 u{background:var(--violet);box-shadow:0 0 14px var(--violet);top:auto;bottom:-6px}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.frame{position:relative;border-radius:.8rem;overflow:hidden;box-shadow:0 0 0 2px var(--cyan),0 0 40px rgba(34,228,255,.35);transition:transform .15s ease-out;animation:float 6s ease-in-out infinite;will-change:transform}
+@keyframes float{50%{translate:0 -12px}}
+.frame img{display:block;width:100%;height:auto}
+.scan{position:absolute;left:0;right:0;top:0;height:30%;background:linear-gradient(to bottom,transparent,rgba(34,228,255,.28),transparent);transform:translateY(-100%);animation:scan 4.5s ease-in-out infinite;pointer-events:none}
+@keyframes scan{to{transform:translateY(340%)}}
+.hud{position:absolute;width:26px;height:26px;border:3px solid var(--cyan);pointer-events:none;animation:pulse 2.4s ease-in-out infinite}
+.hud.a{left:10px;top:10px;border-right:0;border-bottom:0}.hud.b{right:10px;top:10px;border-left:0;border-bottom:0}
+.hud.c{left:10px;bottom:10px;border-right:0;border-top:0}.hud.d{right:10px;bottom:10px;border-left:0;border-top:0}
+@keyframes pulse{50%{opacity:.35}}
+.tag{position:absolute;background:rgba(6,10,24,.85);color:var(--cyan);border:1px solid var(--cyan);font-weight:600;font-size:.85rem;padding:.35rem .8rem;border-radius:2rem;box-shadow:0 0 16px rgba(34,228,255,.3);animation:float 5s ease-in-out infinite}
+.tag.t1{left:-1.4rem;bottom:16%}.tag.t2{right:-1.2rem;top:10%;color:#c9b6ff;border-color:var(--violet);animation-delay:-2s}.tag.t3{right:-.6rem;bottom:4%;color:var(--amber);border-color:var(--amber);animation-delay:-3.5s}
+
+/* marquee */
+.marq{overflow:hidden;border-block:1px solid var(--line);padding:.8rem 0;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.marq div{display:inline-block;animation:marq 22s linear infinite;font:700 1.2rem var(--head);color:var(--muted)}
+.marq span{margin:0 1.6rem}.marq span::after{content:"◆";margin-left:3.2rem;color:var(--cyan)}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+section{padding:3.5rem 0}
+h2{font:700 clamp(1.8rem,4vw,2.6rem)/1.1 var(--head);margin:0 0 1.5rem;letter-spacing:-.02em}
+h2::before{content:"";display:block;width:3rem;height:4px;background:linear-gradient(90deg,var(--cyan),var(--violet));margin-bottom:1rem;border-radius:2px}
+.about{max-width:42rem;font-size:1.15rem}
+.grid{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr))}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:.8rem;padding:1.5rem;transition:transform .25s,border-color .25s;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(34,228,255,.16),transparent 70%);opacity:0;transition:opacity .25s;pointer-events:none}
+.card:hover{transform:translateY(-6px);border-color:var(--cyan)}
+.card:hover::before{opacity:1}
+.card h3{font:700 1.3rem/1.2 var(--head);margin:0 0 .6rem}
+.card p{margin:0;color:var(--muted)}
+.edu{display:flex;gap:1.25rem;align-items:center}
+.edu .ico{flex:none;width:3.4rem;height:3.4rem;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;background:linear-gradient(135deg,var(--cyan),var(--violet));animation:float 4s ease-in-out infinite}
+.edu strong{display:block;font:700 1.4rem/1.25 var(--head)}
+.edu span{color:var(--muted)}
+.mail{font:700 clamp(1.2rem,4vw,2rem) var(--head);display:inline-block;margin-bottom:1.25rem;overflow-wrap:anywhere;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--cyan));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:slide 5s linear infinite}
+@keyframes slide{to{background-position:200% 0}}
+.contact p{max-width:36rem;margin:0 0 1.5rem}
+footer{padding:2rem 0 3rem;color:var(--muted);font-size:.95rem}
+
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr;padding-top:1rem}
+  .photo{width:min(72%,17rem);margin:1rem auto 0}
+  .btn.alt{margin:.6rem 0 0}
+  .tag.t1{left:-.8rem}.tag.t2{right:-.8rem}.tag.t3{right:-.6rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  h1 span,.rv{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div class="bg"></div><div class="floor" aria-hidden="true"><i></i></div><canvas id="net" aria-hidden="true"></canvas><div class="glow" id="glow"></div><div class="progress" id="bar"></div>
+
+<div class="wrap">
+  <nav aria-label="Main">
+    <a href="#top"><strong>Zakee Ahamed</strong></a>
+    <div><a href="#about">About</a><a href="#strengths">Strengths</a><a href="#education">Education</a><a href="#contact">Contact</a></div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <h1><span>Zakee</span><span>Ahamed</span></h1>
+      <p class="role">I’m an online marketer focused on <b id="typed">unique presentation</b><span class="caret" aria-hidden="true"></span></p>
+      <a class="btn" href="#contact">Get in touch</a><a class="btn alt" href="#strengths">See my strengths</a>
+    </div>
+    <div class="photo" id="photo">
+      <div class="orbit" aria-hidden="true"><u></u></div><div class="orbit o2" aria-hidden="true"><u></u></div>
+      <div class="frame" id="frame">
+        <img src="photo.jpg" alt="Zakee Ahamed smiling in front of a vintage car at sunset" width="720" height="960">
+        <div class="scan"></div><i class="hud a"></i><i class="hud b"></i><i class="hud c"></i><i class="hud d"></i>
+      </div>
+      <span class="tag t1">Presentation</span><span class="tag t2">Online marketing</span><span class="tag t3">Customer first</span>
+    </div>
+  </header>
+
+  <div class="marq" aria-hidden="true"><div><span>Online marketing</span><span>Unique presentation</span><span>Customer satisfaction</span><span>Fresh ideas</span><span>Online marketing</span><span>Unique presentation</span><span>Customer satisfaction</span><span>Fresh ideas</span></div></div>
+
+  <section id="about" class="rv">
+    <h2>About me</h2>
+    <p class="about">I’m an online marketer who holds a degree in online marketing. I practise it as a passion, which lets me try fresh ideas and put real care into every project. I present my work in my own style, and I measure success by how satisfied the customer is.</p>
+  </section>
+
+  <section id="strengths" class="rv">
+    <h2>What I bring</h2>
+    <div class="grid">
+      <div class="card"><h3>Unique presentation</h3><p>Every pitch, post and campaign gets its own look and story, so it doesn’t blend in with everyone else’s.</p></div>
+      <div class="card"><h3>Customer satisfaction</h3><p>I start with what the customer needs and check back until they’re happy with the result.</p></div>
+      <div class="card"><h3>Online marketing training</h3><p>A formal degree gives me a solid grounding in how digital marketing works.</p></div>
+    </div>
+  </section>
+
+  <section id="education" class="rv">
+    <h2>Education</h2>
+    <div class="card edu">
+      <div class="ico" aria-hidden="true">🎓</div>
+      <div><strong>Bachelor’s Degree in Online Marketing</strong><span>Your University Name · Graduation Year</span></div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact rv">
+    <h2>Let’s work together</h2>
+    <p>Have a project or a question? Send me a message and I’ll get back to you.</p>
+    <a class="mail" href="mailto:zakeezin2011@gmail.com">zakeezin2011@gmail.com</a><br>
+    <a class="btn" href="mailto:zakeezin2011@gmail.com">Email me</a>
+  </section>
+
+  <footer>© 2026 Zakee Ahamed</footer>
+</div>
+
+<script>
+(function(){
+  var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine=matchMedia("(hover:hover) and (pointer:fine)").matches;
+
+  /* particle network – capped count + DPR, pauses when tab hidden */
+  var cv=document.getElementById("net"),cx=cv.getContext("2d"),W,H,P=[],mouse={x:-999,y:-999},raf,dist=130;
+  function size(){
+    var d=Math.min(devicePixelRatio||1,1.5);W=innerWidth;H=innerHeight;
+    cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);
+    var n=Math.min(70,Math.round(W*H/20000));P=[];
+    for(var i=0;i<n;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.35});
+    dist=W<700?100:130;
+    if(reduce)draw();
+  }
+  function draw(){
+    cx.clearRect(0,0,W,H);
+    for(var i=0;i<P.length;i++){
+      var a=P[i];
+      if(!reduce){a.x+=a.vx;a.y+=a.vy;if(a.x<0||a.x>W)a.vx*=-1;if(a.y<0||a.y>H)a.vy*=-1;}
+      cx.fillStyle="rgba(34,228,255,.8)";cx.fillRect(a.x-1,a.y-1,2,2);
+      for(var j=i+1;j<P.length;j++){
+        var b=P[j],dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy;
+        if(d2<dist*dist){cx.strokeStyle="rgba(139,92,255,"+(.35*(1-Math.sqrt(d2)/dist))+")";cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(b.x,b.y);cx.stroke();}
+      }
+      var mx=a.x-mouse.x,my=a.y-mouse.y,md=mx*mx+my*my;
+      if(md<22500){cx.strokeStyle="rgba(34,228,255,"+(.5*(1-Math.sqrt(md)/150))+")";cx.beginPath();cx.moveTo(a.x,a.y);cx.lineTo(mouse.x,mouse.y);cx.stroke();}
+    }
+  }
+  function loop(){draw();raf=requestAnimationFrame(loop);}
+  size();
+  if(!reduce){loop();document.addEventListener("visibilitychange",function(){cancelAnimationFrame(raf);if(!document.hidden)loop();});}
+  var rt;addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(size,200);});
+
+  /* cursor glow, scroll bar, spotlight cards, magnetic buttons */
+  var glow=document.getElementById("glow"),bar=document.getElementById("bar"),gx=0,gy=0,tick=false;
+  if(fine&&!reduce){
+    addEventListener("pointermove",function(e){mouse.x=e.clientX;mouse.y=e.clientY;gx=e.clientX;gy=e.clientY;glow.style.opacity=1;
+      if(!tick){tick=true;requestAnimationFrame(function(){glow.style.transform="translate("+gx+"px,"+gy+"px)";tick=false;});}},{passive:true});
+    document.querySelectorAll(".card").forEach(function(c){c.addEventListener("pointermove",function(e){var r=c.getBoundingClientRect();c.style.setProperty("--mx",(e.clientX-r.left)+"px");c.style.setProperty("--my",(e.clientY-r.top)+"px");});});
+    document.querySelectorAll(".btn").forEach(function(b){
+      b.addEventListener("pointermove",function(e){var r=b.getBoundingClientRect();b.style.transform="translate("+((e.clientX-r.left-r.width/2)*.18)+"px,"+((e.clientY-r.top-r.height/2)*.3)+"px)";});
+      b.addEventListener("pointerleave",function(){b.style.transform="";});});
+  }
+  var st=false;addEventListener("scroll",function(){if(st)return;st=true;requestAnimationFrame(function(){var m=document.documentElement.scrollHeight-innerHeight;bar.style.transform="scaleX("+(m>0?scrollY/m:0)+")";st=false;});},{passive:true});
+
+  /* typing */
+  var words=["unique presentation","happy customers","fresh ideas"],w=0,c=0,del=false,t=document.getElementById("typed");
+  if(!reduce){(function tk(){var f=words[w];c+=del?-1:1;t.textContent=f.slice(0,c);var d=del?35:75;
+    if(!del&&c===f.length){del=true;d=1400;}else if(del&&c===0){del=false;w=(w+1)%words.length;d=300;}setTimeout(tk,d);})();}
+
+  /* reveal */
+  var els=document.querySelectorAll(".rv");
+  if("IntersectionObserver" in window&&!reduce){
+    var io=new IntersectionObserver(function(a){a.forEach(function(x){if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target);}});},{threshold:.12});
+    els.forEach(function(el){io.observe(el);});
+  }else els.forEach(function(el){el.classList.add("in");});
+
+  /* photo tilt */
+  var p=document.getElementById("photo"),f=document.getElementById("frame");
+  if(fine&&!reduce){
+    p.addEventListener("pointermove",function(e){var r=p.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;f.style.transform="rotateY("+(x*14)+"deg) rotateX("+(-y*14)+"deg)";});
+    p.addEventListener("pointerleave",function(){f.style.transform="";});
+  }
+})();
+</script>
+</body>
+</html>
